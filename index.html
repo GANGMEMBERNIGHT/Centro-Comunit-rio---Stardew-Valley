@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Centro Comunitário - Stardew Valley</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background-image: url("https://r4.wallpaperflare.com/wallpaper/425/862/503/stardew-valley-farm-stars-pixel-art-hd-wallpaper-4980f8fd113aedbb36b7e80f3021c6cd.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 50px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      h1 {
+        color: #ffffff;
+        text-align: center;
+        font-size: 36px;
+        margin-bottom: 50px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.6);
+      }
+
+      .container-geral {
+        display: flex;
+        flex-direction: column;
+        gap: 45px;
+        width: 100%;
+        max-width: 1000px;
+      }
+
+      .secao-painel {
+        background-color: #16213e;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0px 12px 35px rgba(0, 0, 0, 0.6);
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+      }
+
+      .topo-sala {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .secao-titulo {
+        color: #a2d2ff;
+        font-size: 22px;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .wrapper-imagem {
+        display: block;
+        flex-shrink: 0;
+      }
+
+      .banner-secao-preview {
+        width: 100%;
+        max-width: 450px;
+        height: 65px;
+        border: none;
+        background-color: #0f3460;
+        border-radius: 12px;
+        object-fit: cover;
+        display: block;
+        box-shadow: inset 0px 2px 6px rgba(0, 0, 0, 0.5);
+      }
+
+      .blocos-linha {
+        background-color: #0f3460;
+        border: 1px solid #1a1a2e;
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        box-shadow: inset 0px 4px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .bloco-item {
+        background-color: #1a1a2e;
+        border: 2px solid #533483;
+        padding: 14px 20px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+        border-radius: 10px;
+      }
+
+      .bloco-item.concluido {
+        background-color: #0f2027;
+        border-color: #203a43;
+      }
+
+      .checkbox-custom {
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border: 2px solid #e94560;
+        background-color: #16213e;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      .checkbox-custom:checked {
+        background-color: #e94560;
+        border-color: #ff6b81;
+      }
+
+      .checkbox-custom:checked::after {
+        content: "✔";
+        color: white;
+        font-size: 13px;
+        position: absolute;
+        top: 48%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .img-bloco-preview {
+        width: 48px;
+        height: 48px;
+        border: 2px solid #533483;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+
+      .bloco-texto {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-grow: 1;
+      }
+
+      .nome-item {
+        font-weight: 600;
+        font-size: 15px;
+        color: #ffffff;
+        margin: 0;
+      }
+
+      .bloco-item.concluido .nome-item {
+        text-decoration: line-through;
+        color: #8888aa;
+        opacity: 0.6;
+      }
+
+      .subtexto {
+        font-size: 11px;
+        color: #9999bb;
+        font-weight: 500;
+        margin-top: 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Centro Comunitário - Stardew Valley</h1>
+
+    <div id="container-geral" class="container-geral"></div>
+
+    <script>
+      // CORREÇÃO: O array foi envolvido na constante 'dadosDasSalas'
+      const dadosDasSalas = [
+        {
+          nomeDaSala: "·:*¨༺ ♱✮♱ ༻¨*:·Primavera·:*¨༺ ♱✮♱ ༻¨*:·",
+          imagemBanner:
+            "https://media.discordapp.net/attachments/1321569362787962974/1512749599046238229/image.png?ex=6a253959&is=6a23e7d9&hm=d64259a6e4eeb04430c72b12d3d69ddd629ce343d09cecd8c71b0d7321a5f297&=&format=webp&quality=lossless",
+          itens: [
+            {
+              nome: "Raiz-Forte (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/9/90/Wild_Horseradish.png/24px-Wild_Horseradish.png",
+            },
+            {
+              nome: "Narciso (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/4/4b/Daffodil.png/24px-Daffodil.png",
+            },
+            {
+              nome: "Alho-Poró (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/5/57/Leek.png/24px-Leek.png",
+            },
+            {
+              nome: "Dente-de-Leão (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/b/b1/Dandelion.png/24px-Dandelion.png",
+            },
+            {
+              nome: "Morel (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/b/b1/Morel.png/24px-Morel.png",
+            },
+            {
+              nome: "Chirívia (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/d/db/Parsnip.png/24px-Parsnip.png",
+            },
+            {
+              nome: "Vagem (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/5/5c/Green_Bean.png/24px-Green_Bean.png",
+            },
+            {
+              nome: "Couve-Flor (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/a/aa/Cauliflower.png/24px-Cauliflower.png",
+            },
+            {
+              nome: "Batata (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/c/c2/Potato.png/24px-Potato.png",
+            },
+            {
+              nome: "⭐Chirívia (x5) ",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/d/db/Parsnip.png/24px-Parsnip.png",
+            },
+            {
+              nome: "Damasco (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/f/fc/Apricot.png/24px-Apricot.png",
+            },
+            {
+              nome: "Cereja (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/2/20/Cherry.png/24px-Cherry.png",
+            },
+            {
+              nome: "Peixe-Sol (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/5/56/Sunfish.png/24px-Sunfish.png",
+            },
+            {
+              nome: "Bagre (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/9/99/Catfish.png/24px-Catfish.png",
+            },
+            {
+              nome: "Alocine (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/e/ef/Shad.png/24px-Shad.png",
+            },
+            {
+              nome: "Achigã (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/1/11/Largemouth_Bass.png/24px-Largemouth_Bass.png",
+            },
+            {
+              nome: "Carpa (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/a/a8/Carp.png/24px-Carp.png",
+            },
+            {
+              nome: "Peixe-Gato-Cabeçudo (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/d/db/Bullhead.png/24px-Bullhead.png",
+            },
+            {
+              nome: "Sardinha (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/0/04/Sardine.png/24px-Sardine.png",
+            },
+            {
+              nome: "Brema (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/8/82/Bream.png/24px-Bream.png",
+            },
+            {
+              nome: "Enguia (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/9/91/Eel.png/24px-Eel.png",
+            },
+          ],
+        },
+        {
+          nomeDaSala: "·:*¨༺ ♱✮♱ ༻¨*:·Verão·:*¨༺ ♱✮♱ ༻¨*:·",
+          imagemBanner:
+            "https://media.discordapp.net/attachments/1321569362787962974/1512791808780931245/image.png?ex=6a2560a9&is=6a240f29&hm=7dee3d076b6dda4cba240b343b32945950e619440f0ea487f6012340048f65de&=&format=webp&quality=lossless",
+          itens: [
+            {
+              nome: "Uva (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/c/c2/Grape.png/24px-Grape.png",
+            },
+            {
+              nome: "Café-de-Jardim (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/c/c6/Spice_Berry.png/24px-Spice_Berry.png",
+            },
+            {
+              nome: "Ervilha-de-Cheiro (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/d/d9/Sweet_Pea.png/24px-Sweet_Pea.png",
+            },
+            {
+              nome: "Cogumelo Vermelho (x2)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/e/e1/Red_Mushroom.png/24px-Red_Mushroom.png",
+            },
+            {
+              nome: "Tomate (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/9/9d/Tomato.png/24px-Tomato.png",
+            },
+            {
+              nome: "Pimenta Picante (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/f/f1/Hot_Pepper.png/24px-Hot_Pepper.png",
+            },
+            {
+              nome: "Mirtilo (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/9/9e/Blueberry.png/24px-Blueberry.png",
+            },
+            {
+              nome: "Melão (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/1/19/Melon.png/24px-Melon.png",
+            },
+            {
+              nome: "Milho (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/f/f8/Corn.png/24px-Corn.png",
+            },
+            {
+              nome: "⭐Melão (x5)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/1/19/Melon.png/24px-Melon.png",
+            },
+            {
+              nome: "⭐Milho (x5)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/f/f8/Corn.png/24px-Corn.png",
+            },
+            {
+              nome: "Laranja (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/4/43/Orange.png/24px-Orange.png",
+            },
+            {
+              nome: "Pêssego (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/e/e2/Peach.png/24px-Peach.png",
+            },
+            {
+              nome: "Esturjão (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/4/42/Sturgeon.png/24px-Sturgeon.png",
+            },
+            {
+              nome: "Atum (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/c/c5/Tuna.png/24px-Tuna.png",
+            },
+            {
+              nome: "Cioba (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/d/d3/Red_Snapper.png/24px-Red_Snapper.png",
+            },
+            {
+              nome: "Tilápia (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/7/73/Tilapia.png/24px-Tilapia.png",
+            },
+            {
+              nome: "Baiacu (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/b/ba/Pufferfish.png/24px-Pufferfish.png",
+            },
+            {
+              nome: "Broto-de-Samambaia (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/4/48/Fiddlehead_Fern.png/24px-Fiddlehead_Fern.png",
+            },
+            {
+              nome: "Papoula (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/3/37/Poppy.png/24px-Poppy.png",
+            },
+            {
+              nome: "Girassol (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/8/81/Sunflower.png/24px-Sunflower.png",
+            },
+            {
+              nome: "Repolho Roxo (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/2/2d/Red_Cabbage.png/24px-Red_Cabbage.png",
+            },
+            {
+              nome: "Trigo (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/e/e2/Wheat.png/24px-Wheat.png",
+            },
+            ,
+          ],
+        },
+        {
+          nomeDaSala: "·:*¨༺ ♱✮♱ ༻¨*:·Outono·:*¨༺ ♱✮♱ ༻¨*:·",
+          imagemBanner:
+            "https://cdn.discordapp.com/attachments/1321569362787962974/1512795513664307280/image.png?ex=6a25641c&is=6a24129c&hm=79c1dc6b1c474e41fefeac6b96e7fbaac89445c6fce8329ee63720a6a6adec08&",
+          itens: [
+            {
+              nome: "Cogumelo Comum (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/2/2e/Common_Mushroom.png/24px-Common_Mushroom.png",
+            },
+            {
+              nome: "Ameixa Selvagem (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/3/3b/Wild_Plum.png/24px-Wild_Plum.png",
+            },
+            {
+              nome: "Avelã (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/3/31/Hazelnut.png/24px-Hazelnut.png",
+            },
+            {
+              nome: "Amora (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/2/25/Blackberry.png/24px-Blackberry.png",
+            },
+            {
+              nome: "Berinjela (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/8/8f/Eggplant.png/24px-Eggplant.png",
+            },
+            {
+              nome: "Abóbora (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/6/64/Pumpkin.png/24px-Pumpkin.png",
+            },
+            {
+              nome: "Inhame (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/5/52/Yam.png/24px-Yam.png",
+            },
+            {
+              nome: "⭐Abóbora (x5)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/6/64/Pumpkin.png/24px-Pumpkin.png",
+            },
+            {
+              nome: "Romã (x2)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/1/1b/Pomegranate.png/24px-Pomegranate.png",
+            },
+            {
+              nome: "Salmão Híbrido (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/0/01/Tiger_Trout.png/24px-Tiger_Trout.png",
+            },
+            {
+              nome: "Picão Verde (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/0/05/Walleye.png/24px-Walleye.png",
+            },
+            {
+              nome: "Maçã (x3)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/7/7d/Apple.png/24px-Apple.png",
+            },
+          ],
+        },
+        {
+          nomeDaSala: "·:*¨༺ ♱✮♱ ༻¨*:·Inverno·:*¨༺ ♱✮♱ ༻¨*:·",
+          imagemBanner:
+            "https://cdn.discordapp.com/attachments/1321569362787962974/1512795672980750477/image.png?ex=6a256442&is=6a2412c2&hm=c754e951203d881fbb583a1842bb924de33378faabd3271bcf4d36ace42fe7fb&",
+          itens: [
+            {
+              nome: "Raiz de Inverno (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/1/11/Winter_Root.png/24px-Winter_Root.png",
+            },
+            {
+              nome: "Fruta de Cristal (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/1/16/Crystal_Fruit.png/24px-Crystal_Fruit.png",
+            },
+            {
+              nome: "Inhame de Neve (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/3/3f/Snow_Yam.png/24px-Snow_Yam.png",
+            },
+            {
+              nome: "Flor de Açafrão (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/2/2f/Crocus.png/24px-Crocus.png",
+            },
+            {
+              nome: "Concha de Náutilo (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/a/a4/Nautilus_Shell.png/24px-Nautilus_Shell.png",
+            },
+          ],
+        },
+        {
+          nomeDaSala: "·:*¨༺ ♱✮♱ ༻¨*:·Todas Estações·:*¨༺ ♱✮♱ ༻¨*:·s",
+          imagemBanner:
+            "https://media.discordapp.net/attachments/1321569362787962974/1512801111478898819/image.png?ex=6a256953&is=6a2417d3&hm=4414cc7831437aa05ad30b8faa0c81d88c3e28f7bd3606532316201dd9ee7886&=&format=webp&quality=lossless",
+          itens: [
+            {
+              nome: "Madeira (x99)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/d/df/Wood.png/24px-Wood.png",
+            },
+            {
+              nome: "Madeira (x99)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/d/df/Wood.png/24px-Wood.png",
+            },
+            {
+              nome: "Pedra (x99)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/d/d4/Stone.png/24px-Stone.png",
+            },
+            {
+              nome: "Madeira de Lei (x10)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/e/ed/Hardwood.png/24px-Hardwood.png",
+            },
+            {
+              nome: "Coco (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/2/2f/Coconut.png/24px-Coconut.png",
+            },
+            {
+              nome: "Fruto do Cacto (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/3/32/Cactus_Fruit.png/24px-Cactus_Fruit.png",
+            },
+            {
+              nome: "Cenoura Subterrânea (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/3/34/Cave_Carrot.png/24px-Cave_Carrot.png",
+            },
+            {
+              nome: "Cogumelo Roxo (x2)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/4/4b/Purple_Mushroom.png/24px-Purple_Mushroom.png",
+            },
+            {
+              nome: "Leite Grande (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/f/f3/Large_Milk_ES.png/24px-Large_Milk_ES.png",
+            },
+            {
+              nome: "Ovo Grande Marrom (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/9/91/Large_Brown_Egg.png/24px-Large_Brown_Egg.png",
+            },
+            {
+              nome: "Ovo Grande (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/5/5d/Large_Egg.png/24px-Large_Egg.png",
+            },
+            {
+              nome: "Leite Grande de Cabra (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/f/fa/Large_Goat_Milk_ES.png/24px-Large_Goat_Milk_ES.png",
+            },
+            {
+              nome: "Lã (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/3/34/Wool.png/24px-Wool.png",
+            },
+            {
+              nome: "Ostra (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/5/54/Oyster.png/24px-Oyster.png",
+            },
+            {
+              nome: "Concha (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/e/ed/Clam.png/24px-Clam.png",
+            },
+            {
+              nome: "Carangueijo (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/6/63/Crab.png/24px-Crab.png",
+            },
+            {
+              nome: "Berbigão (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/a/ad/Cockle.png/24px-Cockle.png",
+            },
+            {
+              nome: "Mexilhão (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/a/aa/Mussel.png/24px-Mussel.png",
+            },
+            {
+              nome: "Peixe-Fantasma (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/7/72/Ghostfish.png/24px-Ghostfish.png",
+            },
+            {
+              nome: "Areinha (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/b/bb/Sandfish.png/24px-Sandfish.png",
+            },
+            {
+              nome: "Madeirão (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/9/97/Woodskip.png/24px-Woodskip.png",
+            },
+            {
+              nome: "Barra de Cobre (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/f/f1/Copper_Bar.png/24px-Copper_Bar.png",
+            },
+            {
+              nome: "Barra de Ferro (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/6/6c/Iron_Bar.png/24px-Iron_Bar.png",
+            },
+            {
+              nome: "Barra de Ouro (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/4/4e/Gold_Bar.png/24px-Gold_Bar.png",
+            },
+            {
+              nome: "Quartzo (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/c/cf/Quartz.png/24px-Quartz.png",
+            },
+            {
+              nome: "Cristal da Terra (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/7/74/Earth_Crystal.png/24px-Earth_Crystal.png",
+            },
+            {
+              nome: "Lágrima Congelada (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/e/ec/Frozen_Tear.png/24px-Frozen_Tear.png",
+            },
+            {
+              nome: "Quartzo de Fogo (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/5/5b/Fire_Quartz.png/24px-Fire_Quartz.png",
+            },
+            {
+              nome: "Essência Solar (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/f/f4/Solar_Essence.png/24px-Solar_Essence.png",
+            },
+            {
+              nome: "Essência Nula (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/1/1f/Void_Essence.png/24px-Void_Essence.png",
+            },
+            {
+              nome: "Xarope de Ácer (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/6/6a/Maple_Syrup.png/24px-Maple_Syrup.png",
+            },
+            {
+              nome: "Trufa (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/f/f2/Truffle.png/24px-Truffle.png",
+            },
+            {
+              nome: "Hossomaki (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/b/b6/Maki_Roll.png/24px-Maki_Roll.png",
+            },
+            {
+              nome: "Ovo Frito (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/1/18/Fried_Egg.png/24px-Fried_Egg.png",
+            },
+            {
+              nome: "Ouriço do Mar (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/e/e7/Sea_Urchin.png/24px-Sea_Urchin.png",
+            },
+            {
+              nome: "Pena de Pato (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/f/f9/Duck_Feather.png/24px-Duck_Feather.png",
+            },
+            {
+              nome: "Água-Marinha (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/a/a2/Aquamarine.png/24px-Aquamarine.png",
+            },
+            {
+              nome: "Esquálio (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/b/bd/Chub.png/24px-Chub.png",
+            },
+            {
+              nome: "Geodo Congelado (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/b/bf/Frozen_Geode.png/24px-Frozen_Geode.png",
+            },
+            {
+              nome: "Resina de Carvalho (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/4/40/Oak_Resin.png/24px-Oak_Resin.png",
+            },
+            {
+              nome: "Vinho (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/6/69/Wine.png/24px-Wine.png",
+            },
+            {
+              nome: "Pé de Coelho (x1)",
+              imagem:
+                "https://stardewvalleywiki.com/mediawiki/images/thumb/c/ca/Rabbit%27s_Foot.png/24px-Rabbit%27s_Foot.png",
+            },
+          ],
+        },
+      ];
+
+      const STORAGE_KEY = "stardew-centro-comunitario-checks";
+
+      function loadCheckboxState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return {};
+          const parsed = JSON.parse(raw);
+          return parsed && typeof parsed === "object" ? parsed : {};
+        } catch {
+          return {};
+        }
+      }
+
+      function saveCheckboxState(state) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+
+      function itemStorageKey(salaIndex, itemIndex) {
+        return `${salaIndex}-${itemIndex}`;
+      }
+
+      const checkboxState = loadCheckboxState();
+
+      const container = document.getElementById("container-geral");
+
+      dadosDasSalas.forEach((sala, salaIndex) => {
+        const painel = document.createElement("div");
+        painel.className = "secao-painel";
+        const bannerSrc =
+          sala.imagemBanner ||
+          "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='450' height='70'><rect width='450' height='70' rx='12' fill='%230f3460'/><text x='50%' y='55%' text-anchor='middle' fill='%23a2d2ff' font-family='sans-serif' font-weight='600' font-size='13'>Conjunto de Recursos da Sala</text></svg>";
+
+        painel.innerHTML = `
+                <div class="topo-sala">
+                    <h2 class="secao-titulo">${sala.nomeDaSala}</h2>
+                    <div class="wrapper-imagem"><img class="banner-secao-preview" src="${bannerSrc}"></div>
+                </div>
+                <div class="blocos-linha"></div>
+            `;
+
+        const blocosLinha = painel.querySelector(".blocos-linha");
+        sala.itens.forEach((item, itemIndex) => {
+          const storageKey = itemStorageKey(salaIndex, itemIndex);
+          const savedChecked = Boolean(checkboxState[storageKey]);
+
+          const itemDiv = document.createElement("div");
+          itemDiv.className = savedChecked
+            ? "bloco-item concluido"
+            : "bloco-item";
+          itemDiv.innerHTML = `
+                    <input type="checkbox" class="checkbox-custom"${savedChecked ? " checked" : ""}>
+                    <div class="wrapper-imagem"><img class="img-bloco-preview" src="${item.imagem || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='%23533483' stroke-width='2'><circle cx='12' cy='12' r='10'/></svg>"}"></div>
+                    <div class="bloco-texto">
+                        <p class="nome-item">${item.nome}</p>
+                        <span class="subtexto">Marque a caixa ao lado se já coletou este item</span>
+                    </div>
+                `;
+
+          const checkbox = itemDiv.querySelector(".checkbox-custom");
+          checkbox.addEventListener("change", () => {
+            const checked = checkbox.checked;
+            itemDiv.classList.toggle("concluido", checked);
+            checkboxState[storageKey] = checked;
+            saveCheckboxState(checkboxState);
+          });
+
+          blocosLinha.appendChild(itemDiv);
+        });
+        container.appendChild(painel);
+      });
+    </script>
+  </body>
+</html>
